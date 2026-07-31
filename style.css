@@ -67,3 +67,6 @@
 .ti2-peek:hover{opacity:.9}
 .ti2-peek:disabled{opacity:.5;cursor:default}
 .ti2-teaser{display:none;margin-top:8px;font-size:12px;font-style:italic;line-height:1.4;color:color-mix(in srgb,var(--acc,currentColor) 85%,#fff);opacity:.9;animation:ti2-in .3s ease both}
+
+/* панель — сиблинг .mes в ленте #chat: боковые отступы как у сообщений */
+.tavo-me-panel{padding:0 15px 6px;box-sizing:border-box;width:100%}

@@ -281,12 +281,18 @@
 
     var mesEl = document.querySelector('#chat .mes[mesid="' + lastIdx + '"]') || document.querySelector('.mes[mesid="' + lastIdx + '"]');
     if (!mesEl) return;
-    if (mesEl.querySelector('.' + PANEL_CLASS)) return;
-    var block = mesEl.querySelector('.mes_block') || mesEl;
+    if (document.querySelector('.' + PANEL_CLASS + '[data-mesid="' + lastIdx + '"]')) return; // уже стоит
     var panel = buildPanelDom();
     panel.dataset.mesid = String(lastIdx);
-    // если панель «Идеи для сюжета» уже стоит — встаём после неё (стекаемся ниже)
-    block.appendChild(panel);
+    // вставляем ПОСЛЕ сообщения (сиблингом), а не внутрь: TavernHelper и прочие
+    // рендереры перерисовывают содержимое .mes в iframe и затирают вставленное внутрь.
+    // Стекуемся после уже стоящих tavo-панелей этого сообщения (идеи выше, мы ниже).
+    var anchor = mesEl;
+    while (anchor.nextElementSibling && anchor.nextElementSibling.className &&
+           String(anchor.nextElementSibling.className).indexOf('tavo-') > -1) {
+      anchor = anchor.nextElementSibling;
+    }
+    anchor.insertAdjacentElement('afterend', panel);
     initPanel(panel, lastIdx);
   }
 
