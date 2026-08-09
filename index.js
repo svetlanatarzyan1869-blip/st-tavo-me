@@ -105,21 +105,21 @@
   }
 
   // ---- нативная генерация через ST ----
+  // Через полный конвейер (generateQuietPrompt) — с карточкой/джейлбреком пресета, иначе «голый»
+  // generateRaw режется контент-фильтром провайдера (напр. Gemini: PROHIBITED_CONTENT / prompt_blocked).
   async function genOptions() {
-    var c = ctx();
     var pn = playerName();
-    var user = 'Recent scene transcript:\n\n' + buildTranscript() + '\n\nGive me EXACTLY ' + VARIANTS_COUNT
-      + ' options for what ' + pn + ' could do, feel, or say next - from the player\'s own perspective only.';
-    return await c.generateRaw({ prompt: user, systemPrompt: optionsSystem(pn) });
+    var instr = '[OOC planning task — do NOT write story prose and do NOT continue the roleplay. '
+      + optionsSystem(pn) + ' Give EXACTLY ' + VARIANTS_COUNT + ' options for ' + pn + ' now, as ' + VARIANTS_COUNT + ' lines only.]';
+    return await ctx().generateQuietPrompt({ quietPrompt: instr, quietToLoud: false });
   }
 
-  // Ход игрока: пишем ЗА игрока (вне пресета персонажа), постим как user.
+  // Ход игрока: инструктируем писать ЗА игрока, постим как user.
   async function genPlayerMove(steer) {
     var c = ctx();
     var pn = playerName();
-    var user = 'Recent scene transcript:\n\n' + buildTranscript() + '\n\nWrite the next post by ' + pn
-      + ' taking the scene in THIS direction: ' + steer;
-    var text = await c.generateRaw({ prompt: user, systemPrompt: moveSystem(pn) });
+    var instr = '[' + moveSystem(pn) + ' Take the scene in THIS direction: ' + steer + ' Write ' + pn + '\'s next post now.]';
+    var text = await c.generateQuietPrompt({ quietPrompt: instr, quietToLoud: true });
     text = (text || '').trim();
     if (!text) throw new Error('пустой ответ модели (ход игрока)');
     var mes = { name: pn, is_user: true, is_system: false, send_date: Date.now(), mes: text, extra: {} };
