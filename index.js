@@ -43,9 +43,10 @@
       + 'Write in the SAME language as the transcript. Output ONLY the post text - no preamble, no quotes around it.';
   }
 
-  var REACT_TPL = '[Continue the roleplay in-character as the character(s) and the world, reacting to what {PLAYER} '
-    + 'just did. Stay measured, do not over-dramatize. Never speak or act for {PLAYER}. Match the established style, '
-    + 'POV and formatting.]';
+  var REACT_TPL = '[DIRECTOR NOTE — HIGHEST priority for THIS turn. Continue the roleplay in-character, reacting to what {PLAYER} '
+    + 'JUST did in their latest message. Move the scene FORWARD with genuinely new content — do NOT repeat, rephrase or lightly '
+    + 'rewrite any earlier message. Stay measured, do not over-dramatize. Never speak or act for {PLAYER}. Keep the established '
+    + 'voice, POV and required format.]';
 
   var TYPES = {
     'драма': { e: '🔥', c: '#ff5c7a' }, 'драм': { e: '🔥', c: '#ff5c7a' },
